@@ -1,6 +1,6 @@
 import 'package:dio_flutter_finalproject/model/cep_model.dart';
 import 'package:dio_flutter_finalproject/model/viacep_model.dart';
-import 'package:dio_flutter_finalproject/page/back4app/cep_custom_dio.dart';
+import 'package:dio_flutter_finalproject/repositories/back4app/cep_custom_dio.dart';
 
 class CepRepository {
   final _customDio = CepCustomDio();
