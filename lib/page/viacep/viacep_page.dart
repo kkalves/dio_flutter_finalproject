@@ -1,3 +1,9 @@
+import 'package:dio_flutter_finalproject/model/ceps_model.dart';
+import 'package:dio_flutter_finalproject/model/viacep_model.dart';
+import 'package:dio_flutter_finalproject/page/viacep/viacep_detail_page.dart';
+import 'package:dio_flutter_finalproject/repositories/back4app/cep_repository.dart';
+import 'package:dio_flutter_finalproject/shared/widget/custom_bottom_appbar.dart';
+import 'package:dio_flutter_finalproject/shared/widget/custom_rich_text.dart';
 import 'package:flutter/material.dart';
 
 class ViaCepPage extends StatefulWidget {
@@ -8,123 +14,132 @@ class ViaCepPage extends StatefulWidget {
 }
 
 class _ViaCepPageState extends State<ViaCepPage> {
-  late ScrollController _scrollController;
-  bool _isVisible = true;
-  bool _isSelected = false;
+  CepRepository _cepRepository = CepRepository();
+  var _cepsModel = CepsModel([]);
 
-  FloatingActionButtonLocation get _fabLocation => _isVisible
-      ? FloatingActionButtonLocation.endContained
-      : FloatingActionButtonLocation.endFloat;
+  TextEditingController cepController = TextEditingController(text: "");
+  final ScrollController _scrollController = ScrollController();
 
-  void _listen() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      _show();
-    } else {
-      _hide();
-    }
-  }
+  bool isLoading = false;
 
-  void _show() {
-    if (!_isVisible) {
-      setState(() => _isVisible = true);
-    }
-  }
-
-  void _hide() {
-    if (_isVisible) {
-      setState(() => _isVisible = false);
-    }
+  void loadCeps() async {
+    setState(() {
+      isLoading = true;
+    });
+    _cepsModel = await _cepRepository.getCeps();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _scrollController.addListener(_listen);
+    loadCeps();
   }
 
-  // FloatingActionButtonLocation _fabLocation =
-  //     FloatingActionButtonLocation.endDocked;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: const Icon(
-            Icons.person_pin,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: const Icon(
+          Icons.person_pin,
+        ),
+        title: const Text("Consumo da API do ViaCEP"),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: isLoading
+          ? const CircularProgressIndicator()
+          : ListView.builder(
+              controller: _scrollController,
+              itemCount: _cepsModel.ceps.length,
+              itemBuilder: (context, index) {
+                var cepItem = _cepsModel.ceps[index];
+                return Column(
+                  children: [
+                    ListTile(
+                      key: Key(cepItem.objectId),
+                      leading: Icon(
+                        Icons.location_pin,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      trailing: Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CustomRichText(
+                            title: "Logradouro: ",
+                            text: cepItem.logradouro,
+                          ),
+                          Row(
+                            children: [
+                              CustomRichText(
+                                title: "Bairro: ",
+                                text: cepItem.bairro,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              CustomRichText(
+                                title: "CEP: ",
+                                text: cepItem.cep,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              CustomRichText(
+                                title: "Cidade: ",
+                                text: cepItem.localidade,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              CustomRichText(
+                                title: "UF: ",
+                                text: cepItem.uf,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViaCepDetailPage(
+                                  cepRepository: _cepRepository,
+                                  cepmodel: cepItem),
+                            ));
+                      },
+                    ),
+                    Divider(
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                    )
+                  ],
+                );
+              },
+            ),
+      floatingActionButton: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        child: FloatingActionButton.extended(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          label: Text(
+            "Cadastrar CEP",
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
           ),
-          title: const Text("Consumo da API do ViaCEP"),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        body: ListView(
-          controller: _scrollController,
-        ),
-        floatingActionButton: FloatingActionButton(
           onPressed: () {},
-          tooltip: 'Adicionar CEP',
-          child: const Icon(Icons.add),
+          tooltip: 'Cadastrar CEP',
+          icon: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
         ),
-        floatingActionButtonLocation: _fabLocation,
-        bottomNavigationBar: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          child: _isSelected ? const _CustomBottomAppBar() : null,
-        )
-        //     BottomAppBar(
-        //   shape: shape,
-        //   color: Colors.blue,
-        //   child: IconTheme(
-        //     data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
-        //     child: Row(
-        //       children: <Widget>[
-        //         IconButton(
-        //           tooltip: 'Open navigation menu',
-        //           icon: const Icon(Icons.menu),
-        //           onPressed: () {},
-        //         ),
-        //         if (centerLocations.contains(fabLocation)) const Spacer(),
-        //         IconButton(
-        //           tooltip: 'Search',
-        //           icon: const Icon(Icons.search),
-        //           onPressed: () {},
-        //         ),
-        //         IconButton(
-        //           tooltip: 'Favorite',
-        //           icon: const Icon(Icons.favorite),
-        //           onPressed: () {},
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // );
-        //  _DemoBottomAppBar(
-        //   fabLocation: _fabLocation,
-        //   shape: _showNotch ? const CircularNotchedRectangle() : null,
-        // ),
-        // ),
-        );
-  }
-}
-
-class _CustomBottomAppBar extends StatelessWidget {
-  const _CustomBottomAppBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      child: Row(
-        children: [
-          IconButton(
-            tooltip: 'Editar',
-            icon: const Icon(Icons.edit),
-            onPressed: () {},
-          ),
-          IconButton(
-            tooltip: 'Remover',
-            icon: const Icon(Icons.delete),
-            onPressed: () {},
-          ),
-        ],
       ),
     );
   }

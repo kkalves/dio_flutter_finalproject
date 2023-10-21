@@ -2,15 +2,15 @@
 
 import 'package:dio_flutter_finalproject/model/viacep_model.dart';
 
-class CepModel {
+class CepsModel {
   List<ViaCepModel> _ceps = [];
 
-  CepModel(this._ceps);
+  CepsModel(this._ceps);
 
   List<ViaCepModel> get ceps => _ceps;
   set ceps(List<ViaCepModel> ceps) => _ceps = ceps;
 
-  CepModel.fromJson(Map<String, dynamic> json) {
+  CepsModel.fromJson(Map<String, dynamic> json) {
     if (json['results'] != null) {
       _ceps = <ViaCepModel>[];
       json['results'].forEach((v) {

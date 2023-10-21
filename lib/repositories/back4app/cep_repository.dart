@@ -1,4 +1,4 @@
-import 'package:dio_flutter_finalproject/model/cep_model.dart';
+import 'package:dio_flutter_finalproject/model/ceps_model.dart';
 import 'package:dio_flutter_finalproject/model/viacep_model.dart';
 import 'package:dio_flutter_finalproject/repositories/back4app/cep_custom_dio.dart';
 
@@ -7,13 +7,13 @@ class CepRepository {
 
   CepRepository();
 
-  Future<CepModel> getCeps(String uf) async {
+  Future<CepsModel> getCeps() async {
     var url = "/CEP";
 
-    if (uf.isNotEmpty) url = "$url?where={\"uf\":$uf}";
+    // if (uf.isNotEmpty) url = "$url?where={\"uf\":$uf}";
 
     var result = await _customDio.dio.get(url);
-    return CepModel.fromJson(result.data);
+    return CepsModel.fromJson(result.data);
   }
 
   Future<void> createCep(ViaCepModel cepModel) async {
