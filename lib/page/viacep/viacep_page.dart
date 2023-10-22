@@ -14,7 +14,7 @@ class ViaCepPage extends StatefulWidget {
 }
 
 class _ViaCepPageState extends State<ViaCepPage> {
-  CepRepository _cepRepository = CepRepository();
+  final CepRepository _cepRepository = CepRepository();
   var _cepsModel = CepsModel([]);
 
   TextEditingController cepController = TextEditingController(text: "");

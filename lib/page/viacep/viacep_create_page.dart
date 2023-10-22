@@ -114,7 +114,6 @@ class _ViaCepCreatePageState extends State<ViaCepCreatePage> {
                     FilledButton(
                         onPressed: () {
                           if (_fieldValidation(themeData, cepsModel)) {
-                            print("Cadastrar");
                             Navigator.pop(context, viaCepModel);
                           } else {
                             return;

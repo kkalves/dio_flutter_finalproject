@@ -1,5 +1,4 @@
 import 'package:dio_flutter_finalproject/model/viacep_model.dart';
-import 'package:dio_flutter_finalproject/repositories/back4app/cep_repository.dart';
 import 'package:flutter/material.dart';
 
 class ViaCepDetailPage extends StatefulWidget {
@@ -105,7 +104,6 @@ class _ViaCepDetailPageState extends State<ViaCepDetailPage> {
                               return;
                             } else {
                               if (_fieldValidation(themeData, cepModel)) {
-                                print("Atualizar");
                                 cepModel.logradouro = logradouroController.text;
                                 cepModel.bairro = bairroController.text;
                                 cepModel.complemento =
