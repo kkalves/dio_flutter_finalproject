@@ -1,4 +1,4 @@
-import 'package:dio_flutter_finalproject/page/lista_contatos_page.dart';
+import 'package:dio_flutter_finalproject/page/lista_contatos/lista_contatos_page.dart';
 import 'package:dio_flutter_finalproject/page/viacep/viacep_page.dart';
 import 'package:flutter/material.dart';
 

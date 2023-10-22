@@ -1,6 +1,6 @@
-import 'package:dio_flutter_finalproject/model/ceps_model.dart';
-import 'package:dio_flutter_finalproject/model/viacep_model.dart';
-import 'package:dio_flutter_finalproject/repositories/viacep_repository.dart';
+import 'package:dio_flutter_finalproject/model/ceps/ceps_model.dart';
+import 'package:dio_flutter_finalproject/model/ceps/viacep_model.dart';
+import 'package:dio_flutter_finalproject/repositories/viacep/viacep_repository.dart';
 import 'package:dio_flutter_finalproject/shared/widget/custom_rich_text.dart';
 import 'package:flutter/material.dart';
 

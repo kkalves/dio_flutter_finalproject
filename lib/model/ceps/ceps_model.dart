@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_getters_setters
 
-import 'package:dio_flutter_finalproject/model/viacep_model.dart';
+
+import 'package:dio_flutter_finalproject/model/ceps/viacep_model.dart';
 
 class CepsModel {
   List<ViaCepModel> _ceps = [];

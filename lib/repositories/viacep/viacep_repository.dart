@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dio_flutter_finalproject/model/viacep_model.dart';
+import 'package:dio_flutter_finalproject/model/ceps/viacep_model.dart';
 import 'package:http/http.dart' as http;
 
 class ViaCepRepository {
