@@ -1,8 +1,8 @@
 import 'package:dio_flutter_finalproject/model/ceps_model.dart';
 import 'package:dio_flutter_finalproject/model/viacep_model.dart';
+import 'package:dio_flutter_finalproject/page/viacep/viacep_create_page.dart';
 import 'package:dio_flutter_finalproject/page/viacep/viacep_detail_page.dart';
 import 'package:dio_flutter_finalproject/repositories/back4app/cep_repository.dart';
-import 'package:dio_flutter_finalproject/shared/widget/custom_bottom_appbar.dart';
 import 'package:dio_flutter_finalproject/shared/widget/custom_rich_text.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +40,7 @@ class _ViaCepPageState extends State<ViaCepPage> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -47,10 +48,10 @@ class _ViaCepPageState extends State<ViaCepPage> {
           Icons.person_pin,
         ),
         title: const Text("Consumo da API do ViaCEP"),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: themeData.colorScheme.inversePrimary,
       ),
       body: isLoading
-          ? const CircularProgressIndicator()
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               controller: _scrollController,
               itemCount: _cepsModel.ceps.length,
@@ -62,11 +63,11 @@ class _ViaCepPageState extends State<ViaCepPage> {
                       key: Key(cepItem.objectId),
                       leading: Icon(
                         Icons.location_pin,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: themeData.colorScheme.primary,
                       ),
                       trailing: Icon(
                         Icons.keyboard_arrow_right,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: themeData.colorScheme.primary,
                       ),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,18 +109,16 @@ class _ViaCepPageState extends State<ViaCepPage> {
                           ),
                         ],
                       ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViaCepDetailPage(
-                                  cepRepository: _cepRepository,
-                                  cepmodel: cepItem),
-                            ));
+                      onTap: () async {
+                        await _navigateAndDisplayDetailPage(
+                            context, themeData, cepItem);
+
+                        loadCeps();
+                        setState(() {});
                       },
                     ),
                     Divider(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color: themeData.colorScheme.surfaceVariant,
                     )
                   ],
                 );
@@ -128,19 +127,106 @@ class _ViaCepPageState extends State<ViaCepPage> {
       floatingActionButton: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         child: FloatingActionButton.extended(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: themeData.colorScheme.primary,
           label: Text(
             "Cadastrar CEP",
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+            style: themeData.textTheme.titleMedium!
+                .copyWith(color: themeData.colorScheme.onPrimary),
           ),
-          onPressed: () {},
+          onPressed: () async {
+            await _navigateAndDisplayCreatePage(context, themeData);
+            loadCeps();
+            setState(() {});
+          },
           tooltip: 'Cadastrar CEP',
-          icon: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
+          icon: Icon(Icons.add, color: themeData.colorScheme.onPrimary),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
+      bottomNavigationBar: const BottomAppBar(
+        height: 70,
+      ),
     );
+  }
+
+  Future<void> _navigateAndDisplayCreatePage(
+      BuildContext context, ThemeData themeData) async {
+    final viaCepModel = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const ViaCepCreatePage(),
+          settings: RouteSettings(arguments: _cepsModel)),
+    );
+
+    if (viaCepModel == null) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    await _cepRepository.createCep(viaCepModel);
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          duration: const Duration(milliseconds: 2000),
+          dismissDirection: DismissDirection.down,
+          backgroundColor: Color(Colors.green.value),
+          content: Text(
+            "CEP cadastrado com Sucesso!",
+            style: themeData.textTheme.titleMedium!
+                .copyWith(color: themeData.colorScheme.onPrimary),
+          )));
+  }
+
+  Future<void> _navigateAndDisplayDetailPage(
+      BuildContext context, ThemeData themeData, ViaCepModel cepItem) async {
+    final results = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViaCepDetailPage(cepModel: cepItem),
+            settings: RouteSettings(arguments: [_cepRepository, cepItem])));
+
+    if (results == null) return;
+
+    if (results[1]) {
+      await _cepRepository.deleteCep((results[0] as ViaCepModel).objectId);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+            duration: const Duration(milliseconds: 2000),
+            dismissDirection: DismissDirection.down,
+            backgroundColor: Color(Colors.green.value),
+            content: Text(
+              "Cep Removido com Sucesso!",
+              style: themeData.textTheme.titleMedium!
+                  .copyWith(color: themeData.colorScheme.onPrimary),
+            )));
+    } else {
+      await _cepRepository.updateCep(results[0]);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+            duration: const Duration(milliseconds: 2000),
+            dismissDirection: DismissDirection.down,
+            backgroundColor: Color(Colors.green.value),
+            content: Text(
+              "Cep Atualizado com Sucesso!",
+              style: themeData.textTheme.titleMedium!
+                  .copyWith(color: themeData.colorScheme.onPrimary),
+            )));
+    }
   }
 }

@@ -75,6 +75,22 @@ class ViaCepModel {
     _updatedAt = json['updatedAt'];
   }
 
+  ViaCepModel.fromViaCepJson(Map<String, dynamic> json) {
+    // _objectId = "";
+    _cep = json['cep'] ?? "";
+    _logradouro = json['logradouro'] ?? "";
+    _complemento = json['complemento'] ?? "";
+    _bairro = json['bairro'] ?? "";
+    _localidade = json['localidade'] ?? "";
+    _uf = json['uf'] ?? "";
+    _ibge = json['ibge'] ?? "";
+    _gia = json['gia'] ?? "";
+    _ddd = json['ddd'] ?? "";
+    _siafi = json['siafi'] ?? "";
+    // _createdAt = "";
+    // _updatedAt = "";
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['objectId'] = _objectId;
@@ -97,14 +113,14 @@ class ViaCepModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['cep'] = _cep;
     data['logradouro'] = _logradouro;
-    data['complemento'] = _complemento;
+    data['complemento'] = _complemento.isEmpty ? " " : _complemento;
     data['bairro'] = _bairro;
     data['localidade'] = _localidade;
     data['uf'] = _uf;
     data['ibge'] = _ibge;
-    data['gia'] = _gia;
+    data['gia'] = _gia.isEmpty ? " " : _gia;
     data['ddd'] = _ddd;
-    data['siafi'] = _siafi;
+    data['siafi'] = _siafi.isEmpty ? " " : _siafi;
     return data;
   }
 

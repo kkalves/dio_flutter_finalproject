@@ -8,7 +8,7 @@ class ViaCepRepository {
     var response =
         await http.get(Uri.parse("https://viacep.com.br/ws/$cep/json/"));
     if (response.statusCode == 200) {
-      return ViaCepModel.fromJson(jsonDecode(response.body));
+      return ViaCepModel.fromViaCepJson(jsonDecode(response.body));
     } else {
       return ViaCepModel.empty();
     }

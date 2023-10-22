@@ -7,21 +7,19 @@ class CustomRichText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
     return Text.rich(
-      overflow: TextOverflow.ellipsis,
-      maxLines: 15,
       TextSpan(
         text: title,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary),
+        style: themeData.textTheme.bodyLarge!.copyWith(
+            fontWeight: FontWeight.bold, color: themeData.colorScheme.primary),
         children: [
           TextSpan(
               text: text,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.primary)),
+                  .copyWith(color: themeData.colorScheme.primary)),
         ],
       ),
     );
