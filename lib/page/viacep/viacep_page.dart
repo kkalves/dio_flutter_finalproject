@@ -190,8 +190,7 @@ class _ViaCepPageState extends State<ViaCepPage> {
     final results = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ViaCepDetailPage(cepModel: cepItem),
-            settings: RouteSettings(arguments: [_cepRepository, cepItem])));
+            builder: (context) => ViaCepDetailPage(cepModel: cepItem)));
 
     if (results == null) return;
 

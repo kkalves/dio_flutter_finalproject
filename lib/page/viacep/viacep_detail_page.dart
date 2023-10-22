@@ -47,9 +47,6 @@ class _ViaCepDetailPageState extends State<ViaCepDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)!.settings.arguments as List;
-    final cepRepository = arguments[0] as CepRepository;
-    // final cepModel = arguments[1] as ViaCepModel;
     final ThemeData themeData = Theme.of(context);
 
     return GestureDetector(
