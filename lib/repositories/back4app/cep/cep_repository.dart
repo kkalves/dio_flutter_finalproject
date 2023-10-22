@@ -1,9 +1,9 @@
 import 'package:dio_flutter_finalproject/model/ceps/ceps_model.dart';
 import 'package:dio_flutter_finalproject/model/ceps/viacep_model.dart';
-import 'package:dio_flutter_finalproject/repositories/back4app/cep/cep_custom_dio.dart';
+import 'package:dio_flutter_finalproject/repositories/back4app/custom_dio.dart';
 
 class CepRepository {
-  final _customDio = CepCustomDio();
+  final _customDio = Back4AppCustomDio();
 
   CepRepository();
 

@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_getters_setters
 
-import 'package:dio_flutter_finalproject/model/contato_model.dart';
+import 'package:dio_flutter_finalproject/model/lista_contatos/contato_model.dart';
 
 class ListaContatosModel {
   List<ContatoModel>? _listaContatos;
