@@ -1,4 +1,5 @@
-import 'package:dio_flutter_finalproject/page/main_page.dart';
+// import 'package:dio_flutter_finalproject/page/main_page.dart';
+import 'package:dio_flutter_finalproject/page/splash_page.dart';
 import 'package:flutter/material.dart';
 
 class FinalProjectApp extends StatelessWidget {
@@ -10,10 +11,10 @@ class FinalProjectApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MainPage(),
+      home: const SplashPage(),
     );
   }
 }

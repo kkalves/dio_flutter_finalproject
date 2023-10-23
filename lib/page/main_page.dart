@@ -16,40 +16,41 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Expanded(
-          child: PageView(
-            controller: pageController,
-            onPageChanged: (value) {
-              setState(() {
-                currentPageIndex = value;
-              });
-            },
-            children: const [
-              ViaCepPage(),
-              ListaContatosPage(),
-            ],
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (value) {
+                setState(() {
+                  currentPageIndex = value;
+                });
+              },
+              children: const [
+                ViaCepPage(),
+                ListaContatosPage(),
+              ],
+            ),
           ),
-        ),
-        BottomNavigationBar(
-            onTap: (value) {
-              pageController.jumpToPage(value);
-            },
-            currentIndex: currentPageIndex,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.person_pin,
-                  ),
-                  label: "Via Cep"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.contact_phone,
-                  ),
-                  label: "Lista de Contatos"),
-            ]),
-      ],
-    ));
+          BottomNavigationBar(
+              onTap: (value) {
+                pageController.jumpToPage(value);
+              },
+              currentIndex: currentPageIndex,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.person_pin,
+                    ),
+                    label: "Via Cep"),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.contact_phone,
+                    ),
+                    label: "Lista de Contatos"),
+              ]),
+        ],
+      ),
+    );
   }
 }
